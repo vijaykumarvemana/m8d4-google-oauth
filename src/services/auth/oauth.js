@@ -7,7 +7,7 @@ const googleStrategy = new GoogleStrategy({
     clientSecret: process.env.OAUTH_CLIENT_SECRET,
     callbackURL: `${process.env.API_URL}/users/googleRedirect`,
 },
-async (accessToken, refreshToken, googleProfile, passportNext) => {
+async (accesToken, googleProfile, passportNext) => {
     try{
         console.log(googleProfile);
 
@@ -26,9 +26,9 @@ async (accessToken, refreshToken, googleProfile, passportNext) => {
               const createdUser = new UserModel(newUser)
               const savedUser = await createdUser.save()
       
-              const tokens = await JWTAuthentication(savedUser)
+              const token = await JWTAuthentication(savedUser)
       
-              passportNext(null, { tokens })
+              passportNext(null, { token})
         }
     }catch(error){
         passportNext(error, null)

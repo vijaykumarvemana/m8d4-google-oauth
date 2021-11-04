@@ -14,7 +14,7 @@ import { notFoundHandler, badRequestHandler, genericErrorHandler, unauthorizedHa
 const server = express()
 const port = process.env.PORT || 3001
 
-passport.use('google',GoogleStrategy)
+passport.use('google', GoogleStrategy)
 
 server.use(cors())
 server.use(express.json())

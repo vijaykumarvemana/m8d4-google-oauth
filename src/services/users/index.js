@@ -75,18 +75,19 @@ userRouter.delete("/:userID", JWTAuthMiddleware,  async(req, res , next) => {
       next(error)  
     }
 })
-userRouter.get("/googleLogin", passport.authenticate("google", { scope: ["profile", "email"] })) // This endpoint receives Google login requests from our FE and redirects them to Google
+userRouter.get("/googleLogin", passport.authenticate("google", { scope: ["profile", "email"] })) 
 
-userRouter.get("/googleRedirect"
+userRouter.get("/googleRedirect",  passport.authenticate("google"), async (req, res, next) => {
+  try {
+    console.log(req.user) 
+    res.send(req.user.token)
+  } catch (error) {
+    next(error)
+  }
+}
 ) 
 
-// userRouter.post("/register", async (req,res,next) =>{
-//     try {
-//         const
-//     } catch (error) {
-//         next()
-//     }
-// })
+
 
 userRouter.post("/login", async (req, res, next) => {
     try {
