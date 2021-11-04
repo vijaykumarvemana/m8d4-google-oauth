@@ -1,6 +1,8 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import passport from 'passport'
+import GoogleStrategy from './services/auth/oauth.js'
 import blogsRouter from './services/index.js'
 import reviewRouter  from './services/reviews/index.js'
 import authorRouter from './services/authors/index.js'
@@ -12,8 +14,11 @@ import { notFoundHandler, badRequestHandler, genericErrorHandler, unauthorizedHa
 const server = express()
 const port = process.env.PORT || 3001
 
+passport.use('google',GoogleStrategy)
+
 server.use(cors())
 server.use(express.json())
+server.use(passport.initialize())
 
 
 server.use("/blogPosts", blogsRouter)

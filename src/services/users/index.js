@@ -1,7 +1,7 @@
 import express from 'express'
 import createHttpError from 'http-errors'
 import UserModel from './schema.js'
-
+import passport from 'passport'
 import { JWTAuthMiddleware } from "../auth/token.js"
 import { JWTAuthentication} from "../auth/jwt.js"
 
@@ -75,6 +75,10 @@ userRouter.delete("/:userID", JWTAuthMiddleware,  async(req, res , next) => {
       next(error)  
     }
 })
+userRouter.get("/googleLogin", passport.authenticate("google", { scope: ["profile", "email"] })) // This endpoint receives Google login requests from our FE and redirects them to Google
+
+userRouter.get("/googleRedirect"
+) 
 
 // userRouter.post("/register", async (req,res,next) =>{
 //     try {
