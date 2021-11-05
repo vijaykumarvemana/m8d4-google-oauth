@@ -3,18 +3,18 @@ import GoogleStrategy from 'passport-google-oauth20'
 import UserModel from "../users/schema.js"
 import { JWTAuthentication } from './jwt.js';
 const googleStrategy = new GoogleStrategy({     
-    clientID: process.env.OAUTH_CLIENT_ID,
-    clientSecret: process.env.OAUTH_CLIENT_SECRET,
-    callbackURL: `${process.env.API_URL}/users/googleRedirect`,
+    clientID: process.env.GOOGLE_OAUTH_ID,
+    clientSecret: process.env.GOOGLE_OAUTH_SECRET,
+    callbackURL: process.env.API_URL,
 },
-async (accesToken, googleProfile, passportNext) => {
+async (accessToken, refreshToken, googleProfile, passportNext) => {
     try{
         console.log(googleProfile);
 
         const user = await UserModel.findOne({googleId: googleProfile.id});
         if(user){
-            const token = await JWTAuthentication(user);
-            passportNext(null, {token});
+            const tokens = await JWTAuthentication(user);
+            passportNext(null, {tokens});
         }else{
             const newUser = {
             first_name: googleProfile.name.givenName,
@@ -26,9 +26,9 @@ async (accesToken, googleProfile, passportNext) => {
               const createdUser = new UserModel(newUser)
               const savedUser = await createdUser.save()
       
-              const token = await JWTAuthentication(savedUser)
+              const tokens = await JWTAuthentication(savedUser)
       
-              passportNext(null, { token})
+              passportNext(null, { tokens})
         }
     }catch(error){
         passportNext(error, null)

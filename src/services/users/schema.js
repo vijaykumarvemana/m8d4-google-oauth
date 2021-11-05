@@ -11,6 +11,7 @@ const userSchema = new Schema (
         last_name: { type: String, required: true},
         email: {type: String, required: true},
         password: {type: String},
+        refreshToken: {type: String},
         googleId: {type: String},
     },
     {
@@ -37,6 +38,7 @@ userSchema.methods.toJSON = function(){
     delete userObject.createdAt
     delete userObject.updatedAt
     delete userObject.__v
+    delete userObject.refreshToken
 
     return userObject
 }
